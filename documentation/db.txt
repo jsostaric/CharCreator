@@ -1,0 +1,2 @@
+cd c:\xampp\mysql\bin
+mysql -uroot --default_character_set=utf8 < "c:\xampp\htdocs\charcreator\pfscript.sql"
