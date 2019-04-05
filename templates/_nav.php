@@ -25,7 +25,7 @@
       </li>
         <?php endif; ?>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo $route; ?>documentation/era.png" target="_blank">Era</a>
+        <a class="nav-link" href="<?php echo $route; ?>documentation/ERA.png" target="_blank">Era</a>
       </li>
       <li>
         <a class="nav-link" target="_blank" href="https://github.com/jsostaric">Github</a>

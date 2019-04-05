@@ -23,20 +23,15 @@ create table characters(
 
 create table races(
 	id int not null primary key auto_increment,
-	characters int not null,
 	name varchar(50) not null,
-	description varchar(255)
+	size int default 0,
+	description text(65535)
 );
 
 create table klasses(
 	id int not null primary key auto_increment,
 	name varchar(50) not null,
 	hit_die varchar(3) not null,
-	bab int,
-	fort_save int,
-	ref_save int,
-	will_save int,
-	special varchar(50),
 	description varchar(50)
 );
 
@@ -44,7 +39,11 @@ create table character_klass(
 	characters int not null,
 	klasses int not null,
 	level int not null,
-	bab int not null
+	bab int not null,	
+	fort_save int,
+	ref_save int,
+	will_save int,
+	special varchar(50)
 );
 
 create table abilities(
@@ -136,23 +135,28 @@ alter table character_klass add foreign key(klasses) references klasses(id);
 
 insert into users(name, email, password) values("jurica","juraos1@yahoo.com", md5("j"));
 
-insert into klasses(name, bab, fort_save, ref_save, will_save)
- values("Ranger", 1,2,2,0),
- 		("Fighter", 1,2,0,0);
+insert into klasses(name, description)
+ values("Ranger", ""),
+ 		("Fighter", "");
 
-  insert into races(name, description)
- values("Half-orc",""),
- 		("Dwarf","");
+  insert into races(name, size, description)
+ values("Half-Orc",0,"Ability Score Modifiers: +2 to one ability.<br>Size: Medium.<br>Type: Humanoid.<br>Base Speed: 30ft.<br>Intimidating: +2 on Intimidate.<br>Orc Ferocity: 1/day when is brough below 0hp but not killed, can fight 1 more round as if disabled. next round, unless brought above 0hp, falls unconscious and begins dying.<br>Weapon Familiarity: greataxe, falchion, orc weapons are martial weapons.<br>Darkvision: 60ft.<br>Orc Blood: count as humans and orcs for effects realted to race."),
+ 		("Dwarf",0,"Ability Score Modifiers: +2 Constitution, +2 Wisdom, -2 Charisma.<br>Size: Medium.<br>Base Speed: 20ft.<br>Defensive Training: +4 to AC vs. Giants.<br>Hardy: +2 on saving throws vs poison, spells, spell-like abilities.<br> Stability: +4 on CMD vs. bull rush or trip.<br> greed: +2 on Appraise non-magical metals or gemstones.<br> Stonecunning: +2 on Perception on stone walls or floors.<br>Darkvision: 60ft.<br>Hatred: +1 on attack rolls vs Orcs and golinoids.<br> Weapon familiarity: battleaxe, heavy picks, warhammers and all dwarven are martial weapons."),
+ 		("Elf",0, "Ability Score Modifiers: +2 dexterity, +2 intelligence, -2 constitution.<br>Size: Medium.<br>Type: Humanoid.<br>Base Speed: 30ft.<br>Elven Immunities: immune to sleep, gain +2 on saving throws vs enchantment spells and effects.<br>Keen Senses: +2 on perception.<br>Elven Magic: +2 on caster level check made to overcome spell resistance, +2 on spellcraft to identify magic items.<br>Weapon Familiarity: longbow, longsword, rapier, shortbow, any elven weapon is treated as martial weapon.<br>Low-Light Vision: can see twice as far as humans in dim light."),
+ 		("Gnome", 1, "Ability Score Modifiers: +2 constitution, +2 charisma, -2 strength.<br>Type: Humanoid.<br>Size: Small, +1 size bonus to AC, +1 size bonus on attack rolls, -1 to CMB and CMD, +4 on stealth.<br>Base Speed: 20ft.<br>Defensive training: +4 dodge to AC vs giant subtype.<br>Illusio Resistance: +2 saving throw vs illusion spells and effects.<br>Keen Senses: +2 perception.<br>Obsessive: +2 on craft or profession skill of their choice.<br>Gnome Magic: +1 to DC of any saving throws against illusion spells they cast.  Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—dancing lights, ghost sound, prestidigitation, and speak with animals. The caster level for these effects is equal to the gnome’s level. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Charisma modifier.<br>Hatred: +1 attack rolls vs reptilian and goblinoid subtypes.<br>Weapon Familiarity: weapons with name gnome in its name is martial weapon.<br>Low-Light Vision: can see twice as far as humans in dim light."),
+ 		("Half-Elf",0, "Ability Score Modifiers: +2 to one ability.<br>Type: Humanoid.<br>Size: Medium.<br>Base Speed: 30ft.Elven Immunities: immune to sleep, +2 on saving throw vs enchantment spells and effects.<br>Adaptability: gets Skill Focus as bonus feat at 1st level.<br>Keen Senses: +2 perception.<br>Low-Light Vision: can see twice as far as humans in dim light.<br>Elf Blood: count as humans and elves for any effect related to race.<br>Multitalented: can choose two favored classes at first level, gain +1 hp or +1 skill point whenever they take a level in either one of those classes."),
+ 		("Halfling",1, "Ability Score Modifiers: +2 dexterity, +2 charisma, -2 strength.<br>Size: Small. +1 on AC, +1 to attack rolls, -1 to CMB and CMD, +4 on stealth.<br>Type: Humanoid.<br>Base Speed: 20ft.<br>Fearless: +2 on all saving throws vs fear. stacks with bonus by halfling luck.<br>Halfling Luck: +1 on all saving throws.<br>Sure-Footed: +2 on Acrobatics and Climb.<br>Weapon Familiarity: sling, any weapon with halfling in its name is martial weapon.<br>Keen Senses: +2 on perception."),
+ 		("Human",0, "Ability Score Modifiers: +2 to one ability score.<br>Size: Medium.<br>Base Speed: 30ft.<br>Bonus Feat: can select one extra feat at 1st level.<br>Skilled: gain an additional skill rank at first level and one additional rank whenever they gain a level.");
 
 
   insert into characters(users, name, races, aligment, hp) 
- values(1, "Bark", 1,"CG", 12),
+ values(1, "Bark", 1,"CG", 11),
  		(1, "Stronghold", 2,"NG", 18);
 
- insert into character_klass(characters, klasses, level) values(1,1,1), (2,2,1);
+ insert into character_klass(characters, klasses, level, bab, fort_save, ref_save, will_save) values(1,1,1,1,2,2,0), (2,2,1,1,2,0,0);
 
 insert into abilities(characters,strength,dexterity, constitution, intelligence, wisdom, charisma) 
-	values(1,15,12,10,8,14,13), (2,16,13,18,9,16,9);
+	values(1,17,11,11,8,12,10), (2,16,13,18,9,16,9);
 
 insert into equipment(name, type, distance, dmg, ac)
 	values("Longbow", "P",60, "1d8",null),

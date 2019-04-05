@@ -1,10 +1,12 @@
 <?php include_once '../../config.php'; checkLogin();
 
 if(isset($_GET["id"])) {
-    $stmt = $conn->prepare("select a.id, a.name, a.users,a.races, a.aligment, a.hp, b.name as race, c.level, d.name as class, d.bab, d.fort_save, d.ref_save, d.will_save from characters a
-    left join races b on b.id = a.races
-    left join character_klass c on c.characters=a.id
-    left join klasses d on d.id=c.klasses where a.id = :id");
+    $stmt = $conn->prepare("select a.id, a.name, a.users,a.races, a.aligment, a.hp, b.name as race, b.size, b.description,
+                            c.level, d.name as class, c.bab, c.fort_save, c.ref_save, c.will_save 
+                            from characters a
+                            left join races b on b.id = a.races
+                            left join character_klass c on c.characters=a.id
+                            left join klasses d on d.id=c.klasses where a.id = :id");
     $stmt->execute(["id" => $_GET["id"]]);
     $character = $stmt->fetch(PDO::FETCH_OBJ);
 
@@ -12,6 +14,8 @@ if(isset($_GET["id"])) {
     $ref = $character->ref_save;
     $will = $character->will_save;
     $bab = $character->bab;
+    $racial_traits = $character->description;
+    $size = $character->size;
 }
 ?>
 
@@ -68,8 +72,6 @@ if(isset($_GET["id"])) {
                                     $stmt->execute(["id" => $_GET["id"]]);
                                     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-
-
                                     foreach($result as $row): ?>
                                     <tr>
                                     <th scope="row">Strength</th>
@@ -115,49 +117,125 @@ if(isset($_GET["id"])) {
                                 <span class="icon"><a href="#"><i class="fas fa-pencil-alt"></i></a></span></h5><!-- edit icon -->
                             <?php $baseArmor = 10; ?>
                             <div class="row">
-                                <p class="title">AC</p><p>14 =</p>
-                                <p><?php echo $baseArmor; ?> + shield bonus + <?php echo $dexterity; ?> + size modifier + natural armor + deflection modifier + misc</p>
+                                <p class="title">AC</p>
+                                <table>
+                                    <tr>
+                                        <td id="abilities">14</td>
+                                        <td id="abilities">=</td>
+                                        <td id="abilities">10</td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">4</td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">0</td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $dexterity; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $size; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">0</td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">0</td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">0</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <th id="info">total</th>
+                                        <th id="info"></th>
+                                        <th id="info"></th>
+                                        <th id="info"></th>
+                                        <th id="info">armor</th>
+                                        <th id="info"></th>
+                                        <th id="info">shield</th>
+                                        <th id="info"></th>
+                                        <th id="info">dex mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">size mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">natural armor</th>
+                                        <th id="info"></th>
+                                        <th id="info">deflection mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">misc</th>
+                                    </tr>
+                                </table>                               
                             </div>
-
+                            
                             <div class="row">
                                 <p class="title">Touch</p>= <p>10</p>
                                 <p class="title">Flat-Footed</p> = <p>14</p>
                             </div>
                             <hr>
-                            <h6>Saving throws</h6>
-                            <div class="row">
-                                <p class="title">Fortitude</p>
-                                <p>total =</p>
-                                <p><?php echo $fort; ?></p>+
-                                <p><?php echo $constitution; ?></p>+
-                                <p>magic mod</p>+
-                                <p>misc</p>+
-                                <p>temp mod</p>
-                            </div>
-                            <div class="row">
-                                <p class="title">Reflex</p>
-                                <p>total =</p>
-                                <p><?php echo $ref; ?></p>+
-                                <p><?php echo $dexterity; ?></p>+
-                                <p>magic mod</p>+
-                                <p>misc</p>+
-                                <p>temp mod</p>
-                            </div>
-                            <div class="row">
-                                <p class="title">Will</p>
-                                <p>total =</p>
-                                <p><?php echo $will; ?></p>+
-                                <p><?php echo $wisdom; ?></p>+
-                                <p>magic mod</p>+
-                                <p>misc</p>+
-                                <p>temp mod</p>
-                            </div>                          
+                            
+                            <table>
+                                <tr>
+                                    <p>Saving throws</p>
+                                    <th></th>
+                                    <th id="info">total</th>
+                                    <th id="info"></th>
+                                    <th id="info">base save</th>
+                                    <th id="info"></th>
+                                    <th id="info">ability mod</th>
+                                    <th id="info"></th>
+                                    <th id="info">magic mod</th>
+                                    <th id="info"></th>
+                                    <th id="info">misc</th>
+                                    <th id="info"></th>
+                                    <th id="info">temp</th>
+                                </tr>
+
+                                <div class="row">                
+                                    <tr>
+                                    <td><span class="title">Fortitude</span> </td>
+                                    <td id="abilities">2</td>
+                                    <td id="abilities">=</td>
+                                    <td id="abilities"><?php echo $fort; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities"><?php echo $constitution; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>                                                                              
+                                    </tr> 
+                                </div>   
+                                <div class="row">                
+                                    <tr>
+                                    <td><span class="title">Reflex</span> </td>
+                                    <td id="abilities">2</td>
+                                    <td id="abilities">=</td>
+                                    <td id="abilities"><?php echo $ref; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities"><?php echo $dexterity; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>                                                                              
+                                    </tr> 
+                                </div> 
+                                <div class="row">                
+                                    <tr>
+                                    <td><span class="title">Will</span> </td>
+                                    <td id="abilities">1</td>
+                                    <td id="abilities">=</td>
+                                    <td id="abilities"><?php echo $will; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities"><?php echo $wisdom; ?></td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>
+                                    <td id="abilities">+</td>
+                                    <td id="abilities">0</td>                                                                              
+                                    </tr> 
+                                </div>                                
+                            </table>                     
                         </div>
                     </div> <!-- end of defense card -->
-                </div> <!-- end of first row -->
-
-                     <!-- Combat -->                
-                <div class="row">
+               
 
                     <div class="card" style="height: 20em;">
                         <div class="card-body">
@@ -172,18 +250,55 @@ if(isset($_GET["id"])) {
                             </div>
                             <div class="row">
                                 <p class="title">CMB</p>
-                                <p><?php echo $bab + $strength; ?> = </p>
-                                <p><?php echo $bab; ?></p>+
-                                <p><?php echo $strength; ?></p>+
-                                <p>size mod</p>
+                                <table>
+                                    <tr>
+                                        <td id="abilities"><?php echo $bab + $strength + $size; ?></td>
+                                        <td id="abilities">=</td>
+                                        <td id="abilities"><?php echo $bab; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $strength; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $size; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th id="info">total</th>
+                                        <th id="info"></th>
+                                        <th id="info">bab</th>
+                                        <th id="info"></th>
+                                        <th id="info">strength mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">size mod</th>
+                                    </tr>
+                                </table>
                             </div>
                             <div class="row">
                                 <p class="title">CMD</p>
-                                <p><?php echo $bab + $strength + $dexterity + 10; ?> = </p>
-                                <p><?php echo $bab; ?></p>+
-                                <p><?php echo $strength; ?></p>+
-                                <p><?php echo $dexterity; ?></p>+
-                                <p>10</p>
+                                <table>
+                                    <tr>
+                                        <td id="abilities"><?php echo $bab + $strength + $dexterity + $size + 10; ?></td>
+                                        <td id="abilities">=</td>
+                                        <td id="abilities"><?php echo $bab; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $strength; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $dexterity; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities"><?php echo $size; ?></td>
+                                        <td id="abilities">+</td>
+                                        <td id="abilities">10</td>
+                                    </tr>
+                                    <tr>
+                                        <th id="info">total</th>
+                                        <th id="info"></th>
+                                        <th id="info">bab</th>
+                                        <th id="info"></th>
+                                        <th id="info">strength mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">dexterity mod</th>
+                                        <th id="info"></th>
+                                        <th id="info">size mod</th>
+                                    </tr>
+                                </table>
                             </div>                                     
                         </div>
                     </div> <!-- end of combat card -->
@@ -198,16 +313,14 @@ if(isset($_GET["id"])) {
                                 <thead>
                                     <tr>
                                     <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    
+                                    <th scope="col"></th>                                    
                                     <th scope="col">Ability</th>
                                     <th></th>
                                     <th scope="col">Ranks</th>
                                     <th></th>
                                     <th scope="col">Misc</th>  
                                     <th></th>   
-                                    <th scope="col">Total</th>
-                                                                   
+                                    <th scope="col">Total</th>                                                                   
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -227,7 +340,7 @@ if(isset($_GET["id"])) {
                                         <input type="checkbox" 
                                             <?php if($row->isClassAbility == 1): ?> checked <?php endif;?> />                                    
                                     </td>
-                                    <th scope="row"><?php echo $row->name . "<small><span id =\"desc\">".$row->modifier."</span></small>"; ?></th>
+                                    <th scope="row"><?php echo $row->name." <small><span id =\"desc\">".$row->modifier."</span></small>"; ?></th>
                                     
                                     
                                     <td><?php 
@@ -277,7 +390,7 @@ if(isset($_GET["id"])) {
                         </div>
                     </div> <!-- end of skills card -->                
                 </div>    <!-- end of second row with cards -->            
-			</div>
+			</div>          
 		</div>
 		<?php include_once '../../templates/_scripts.php'; ?>
 	</body>
